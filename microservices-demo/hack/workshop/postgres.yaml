@@ -1,0 +1,122 @@
+# Shared Postgres: Temporal persistence + workshop orders
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  labels:
+    app: postgres
+data:
+  01-init.sql: |
+    CREATE USER temporal WITH PASSWORD 'temporal' SUPERUSER;
+    CREATE DATABASE temporal OWNER temporal;
+    CREATE DATABASE temporal_visibility OWNER temporal;
+    CREATE DATABASE orders OWNER postgres;
+    \c orders
+    CREATE TABLE IF NOT EXISTS orders (
+      order_id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      status TEXT NOT NULL,
+      amount_cents INT NOT NULL DEFAULT 0,
+      payment_ids TEXT[] NOT NULL DEFAULT '{}',
+      workflow_id TEXT,
+      run_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    CREATE TABLE IF NOT EXISTS payments (
+      payment_id TEXT PRIMARY KEY,
+      order_id TEXT NOT NULL,
+      amount_cents INT NOT NULL,
+      status TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    INSERT INTO orders (order_id, user_id, status, amount_cents, payment_ids)
+    VALUES
+      ('ORD-demo-pending', 'u-1001', 'PENDING', 7490, '{}'),
+      ('ORD-a3f81c02', 'u-77012', 'PAID', 7490, ARRAY['pay-1','pay-2'])
+    ON CONFLICT DO NOTHING;
+    INSERT INTO payments (payment_id, order_id, amount_cents, status)
+    VALUES
+      ('pay-1', 'ORD-a3f81c02', 7490, 'SUCCESS'),
+      ('pay-2', 'ORD-a3f81c02', 7490, 'SUCCESS')
+    ON CONFLICT DO NOTHING;
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: workshop
+            - name: POSTGRES_DB
+              value: postgres
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - name: postgres
+              containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        - name: init
+          configMap:
+            name: postgres-init
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

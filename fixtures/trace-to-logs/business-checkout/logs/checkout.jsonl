@@ -1,0 +1,7 @@
+{"timestamp": "2026-10-14T09:59:59Z", "message": "INVENTORY_DOWN", "trace_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "request_id": "req-other"}
+{"timestamp": "2026-10-14T10:00:00Z", "message": "PREFIX_TRAP", "trace_id": "cccccccccccccccccccccccccccccccc", "request_id": "req-lab-10"}
+{"timestamp": "2026-10-14T10:00:00Z", "message": "checkout received", "quantity": 2, "trace_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "request_id": "req-lab-1"}
+{"timestamp": "2026-10-14T10:00:01Z", "message": "AMOUNT_MISMATCH", "unit_price": "19.99", "quantity": 2, "actual_cents": 3800, "expected_cents": 3998, "trace_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "request_id": "req-lab-1"}
+{"timestamp": "2026-10-14T10:00:01Z", "message": "background heartbeat"}
+{"timestamp": "2026-10-14T11:00:00Z", "message": "late same id", "trace_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "request_id": "req-lab-1"}
+{"timestamp": "bad-time", "trace_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "message": "invalid timestamp"}

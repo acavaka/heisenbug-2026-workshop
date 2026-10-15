@@ -1,0 +1,58 @@
+{
+  "source": "SYNTHETIC REPLAY",
+  "pod": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+      "namespace": "qai-training",
+      "name": "checkout-probe",
+      "uid": "synthetic-pod-uid",
+      "annotations": {
+        "qai.source": "SYNTHETIC REPLAY"
+      }
+    },
+    "spec": {
+      "containers": [
+        {
+          "name": "app",
+          "image": "synthetic:v1",
+          "envFrom": [
+            {
+              "configMapRef": {
+                "name": "missing-settings"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "status": {
+      "containerStatuses": [
+        {
+          "name": "app",
+          "state": {
+            "waiting": {
+              "reason": "CreateContainerConfigError"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "type": "Warning",
+      "reason": "Failed",
+      "message": "configmap \"missing-settings\" not found",
+      "involvedObject": {
+        "kind": "Pod",
+        "namespace": "qai-training",
+        "name": "checkout-probe",
+        "uid": "synthetic-pod-uid"
+      },
+      "lastTimestamp": "2026-10-14T10:00:00Z"
+    }
+  ],
+  "logs": null,
+  "unavailable_tools": ["get-logs"]
+}

@@ -1,0 +1,13 @@
+# No real API key. The gateway disallows explain and backend overrides.
+# serve requires a provider entry even for Kubernetes-only diagnostics.
+ai:
+  defaultprovider: openai
+  providers:
+    - name: openai
+      model: unused-no-explain
+      password: synthetic-unused
+      baseurl: http://127.0.0.1:9/v1
+active_filters:
+  - Pod
+  - Deployment
+  - Service

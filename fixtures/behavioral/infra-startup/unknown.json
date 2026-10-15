@@ -1,0 +1,12 @@
+{
+  "source": "SYNTHETIC REPLAY",
+  "pod": null,
+  "events": [],
+  "logs": null,
+  "unavailable_tools": [
+    "get-resource",
+    "list-resources",
+    "get-logs",
+    "analyze"
+  ]
+}

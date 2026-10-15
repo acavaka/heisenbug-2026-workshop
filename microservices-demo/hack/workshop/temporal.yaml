@@ -1,0 +1,123 @@
+# Temporal server (auto-setup) + Web UI for workshop Kind cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal
+  labels:
+    app: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      containers:
+        - name: temporal
+          image: temporalio/auto-setup:1.25.2
+          env:
+            - name: DB
+              value: postgres12
+            - name: DB_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: temporal
+            - name: POSTGRES_PWD
+              value: temporal
+            - name: POSTGRES_SEEDS
+              value: postgres
+            - name: DYNAMIC_CONFIG_FILE_PATH
+              value: config/dynamicconfig/docker.yaml
+          ports:
+            - name: grpc
+              containerPort: 7233
+            - name: http
+              containerPort: 7243
+          readinessProbe:
+            tcpSocket:
+              port: 7233
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+  labels:
+    app: temporal
+spec:
+  selector:
+    app: temporal
+  ports:
+    - name: grpc
+      port: 7233
+      targetPort: 7233
+    - name: http
+      port: 7243
+      targetPort: 7243
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-ui
+  labels:
+    app: temporal-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal-ui
+  template:
+    metadata:
+      labels:
+        app: temporal-ui
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: ui
+          image: temporalio/ui:2.31.2
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: temporal:7233
+            - name: TEMPORAL_CORS_ORIGINS
+              value: http://127.0.0.1:8233,http://localhost:8233
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-ui
+  labels:
+    app: temporal-ui
+spec:
+  selector:
+    app: temporal-ui
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

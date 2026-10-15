@@ -1,0 +1,20 @@
+# Workshop overlay: expose catalog admin HTTP + pin local images after kind load.
+# Applied by hack/build-and-load-bug1024.sh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: productcatalogservice
+  labels:
+    app: productcatalogservice
+spec:
+  type: ClusterIP
+  selector:
+    app: productcatalogservice
+  ports:
+  - name: grpc
+    port: 3550
+    targetPort: 3550
+  - name: admin
+    port: 8081
+    targetPort: 8081

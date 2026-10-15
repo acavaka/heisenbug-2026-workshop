@@ -1,0 +1,52 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "checkout"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "spans": [
+            {
+              "traceId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "name": "checkout",
+              "startTimeUnixNano": "1791972000000000000",
+              "endTimeUnixNano": "1791972002000000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "pricing"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "spans": [
+            {
+              "traceId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "name": "pricing",
+              "startTimeUnixNano": "1791972000500000000",
+              "endTimeUnixNano": "1791972001000000000"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

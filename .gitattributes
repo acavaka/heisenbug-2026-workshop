@@ -1,0 +1,3 @@
+# Saved unified diff: the context marker on a blank line is intentional.
+# Preserve the historical artifact and its recorded SHA-256.
+workshop/facilitator/backups/skill-change.patch -whitespace

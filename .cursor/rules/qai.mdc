@@ -1,0 +1,8 @@
+---
+description: QAI workshop agent rules
+alwaysApply: true
+---
+<!-- GENERATED from workshop/prompts by workshop/render.py. Do not edit. -->
+Read and follow AGENTS.md. Skills live in .agents/skills/qai/SKILL.md and are invoked as `python workshop/qai_tool.py --read-only <tool> key=value`.
+For validated application investigations use MCP qai_application (docs/application-mcp.md); for infrastructure use MCP k8sgpt (docs/k8sgpt-mcp.md).
+Collect observations through qai_observe and submit via qai_validate of the same server and investigation_id; only an actual valid=true means acceptance. CLI output is not automatically registered evidence.

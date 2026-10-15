@@ -1,0 +1,18 @@
+{
+  "source": "SYNTHETIC FILE REPLAY",
+  "observed_at": "2026-10-14T10:00:02Z",
+  "pods": [
+    {
+      "name": "checkout-lab",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    },
+    {
+      "name": "pricing-lab",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    }
+  ]
+}

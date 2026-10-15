@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-worker
+  labels:
+    app: order-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-worker
+  template:
+    metadata:
+      labels:
+        app: order-worker
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: worker
+          image: order-worker:workshop
+          imagePullPolicy: Never
+          env:
+            - name: TEMPORAL_HOST
+              value: temporal:7233
+            - name: TASK_QUEUE
+              value: order-saga
+            - name: DATABASE_URL
+              value: postgresql://postgres:workshop@postgres:5432/orders
+            - name: HTTP_PORT
+              value: "8088"
+          ports:
+            - name: http
+              containerPort: 8088
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8088
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-worker
+  labels:
+    app: order-worker
+spec:
+  selector:
+    app: order-worker
+  ports:
+    - name: http
+      port: 8088
+      targetPort: 8088

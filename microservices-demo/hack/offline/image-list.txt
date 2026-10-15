@@ -1,0 +1,35 @@
+# Canonical images for offline Kind workshop.
+# Format: source_ref|local_ref
+# Lead: export-images.sh pulls source, tags as local, saves tar.
+# Participants: load-images.sh loads tar and kind-loads local_ref.
+
+# --- Kind ---
+kindest/node:v1.32.2|kindest/node:v1.32.2
+
+# --- Online Boutique (was gcr.io/google-samples/...) ---
+gcr.io/google-samples/microservices-demo/adservice:v0.10.0|boutique/adservice:v0.10.0
+gcr.io/google-samples/microservices-demo/cartservice:v0.10.0|boutique/cartservice:v0.10.0
+gcr.io/google-samples/microservices-demo/checkoutservice:v0.10.0|boutique/checkoutservice:v0.10.0
+gcr.io/google-samples/microservices-demo/currencyservice:v0.10.0|boutique/currencyservice:v0.10.0
+gcr.io/google-samples/microservices-demo/emailservice:v0.10.0|boutique/emailservice:v0.10.0
+gcr.io/google-samples/microservices-demo/frontend:v0.10.0|boutique/frontend:v0.10.0
+gcr.io/google-samples/microservices-demo/loadgenerator:v0.10.0|boutique/loadgenerator:v0.10.0
+gcr.io/google-samples/microservices-demo/paymentservice:v0.10.0|boutique/paymentservice:v0.10.0
+gcr.io/google-samples/microservices-demo/productcatalogservice:v0.10.0|boutique/productcatalogservice:v0.10.0
+gcr.io/google-samples/microservices-demo/recommendationservice:v0.10.0|boutique/recommendationservice:v0.10.0
+gcr.io/google-samples/microservices-demo/shippingservice:v0.10.0|boutique/shippingservice:v0.10.0
+redis:alpine|boutique/redis:alpine
+busybox:latest|boutique/busybox:latest
+
+# --- Workshop stack ---
+postgres:15-alpine|boutique/postgres:15-alpine
+grafana/tempo:2.6.1|boutique/tempo:2.6.1
+prom/prometheus:v2.54.1|boutique/prometheus:v2.54.1
+grafana/grafana:11.2.0|boutique/grafana:11.2.0
+temporalio/auto-setup:1.25.2|boutique/temporal:1.25.2
+temporalio/ui:2.31.2|boutique/temporal-ui:2.31.2
+order-worker:workshop|boutique/order-worker:workshop
+
+# --- BUG-1024 workshop builds (optional; export if present) ---
+# productcatalogservice:workshop-bug1024|boutique/productcatalogservice:workshop-bug1024
+# frontend:workshop-bug1024|boutique/frontend:workshop-bug1024

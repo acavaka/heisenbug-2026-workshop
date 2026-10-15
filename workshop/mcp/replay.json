@@ -1,0 +1,7 @@
+{
+  "command": "${PYTHON}",
+  "args": ["${WORKSHOP}/mcp/replay_server.py", "--case", "broken"],
+  "namespace": "qai-training",
+  "timeout_s": 15,
+  "mode": "replay"
+}

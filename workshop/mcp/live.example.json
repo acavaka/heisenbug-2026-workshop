@@ -1,0 +1,9 @@
+{
+  "command": "k8sgpt",
+  "args": ["--config", "${WORKSHOP}/mcp/no-explain.yaml", "serve", "--mcp", "--port", "0", "--metrics-port", "0"],
+  "env": {"KUBECONFIG": "${QAI_KUBECONFIG}"},
+  "namespace": "qai-training",
+  "timeout_s": 30,
+  "mode": "live",
+  "exclusive": true
+}
