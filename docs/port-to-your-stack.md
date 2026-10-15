@@ -9,7 +9,7 @@
 | tracker.py и context_fixtures.py | Корпоративный трекер и база знаний | Read-only доступ, ID задачи, происхождение требований |
 | cluster_logs.py | Централизованные логи | Точные request/trace ID, окно, пагинация, отличие ошибки от пустой выборки |
 | tempo.py | Другая система трассировки | Сохранение JSON, отсутствующие spans и временные границы |
-| temporal_inspect.py | Workflow/очередь вашего сервиса | Состояние и история именно нужного выполнения |
+| temporal_inspect.py | Workflow вашего сервиса, TEMPORAL_HOST и TEMPORAL_NAMESPACE | Read-only поиск, describe и страницы истории точного workflow_id + run_id; см. [Temporal](temporal-tools.md) |
 | code.py | Разрешённый checkout исходников | Корни чтения, версия кода, точные file:line |
 | MCP k8sgpt | Диагностика инфраструктуры | Namespace, read-only RBAC, разрешённые операции и наблюдения |
 

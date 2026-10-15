@@ -19,6 +19,9 @@ spec:
         - name: temporal
           image: temporalio/auto-setup:1.25.2
           env:
+            # Include loopback: kubectl port-forward connects inside the pod to localhost.
+            - name: BIND_ON_IP
+              value: "0.0.0.0"
             - name: DB
               value: postgres12
             - name: DB_PORT

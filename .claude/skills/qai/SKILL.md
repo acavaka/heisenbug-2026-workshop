@@ -498,8 +498,12 @@ status в итоговом доказательстве, когда тот уж�
   Учебный файловый replay: связывает известный trace_id с логами сервисов. TODO: уточните когда применять, чем matches отличаются от context и что означает неполнота. Не обращается к живому Tempo/Kubernetes.
 - `python workshop/qai_tool.py --read-only prom_query query=<query>`
   Query current Prometheus metrics with PromQL. Empty results mean no matching samples, not a healthy system. This tool does not query an incident's historical time range.
-- `python workshop/qai_tool.py --read-only temporal_inspect workflow_id=<workflow_id>`
-  Describe the current/latest Temporal execution by workflow_id (status, run_id, times). Does not return event history, retry attempts or proof of payment/refund; correlate with other sources.
+- `python workshop/qai_tool.py --read-only temporal_inspect workflow_id=<workflow_id> run_id=<run_id>`
+  Read-only describe of Temporal execution. Omit run_id for latest, then pin returned run_id for history. Status is not history or proof of payment/refund.
+- `python workshop/qai_tool.py --read-only temporal_list_workflows query=<query> page_size=<page_size> page_token=<page_token>`
+  Read one visibility page in configured TEMPORAL_NAMESPACE when workflow_id is unknown. Filter by observed workflow type, ID, status or time using Temporal visibility query. Empty/eventually consistent results do not prove absence. Follow next_page_token with identical query.
+- `python workshop/qai_tool.py --read-only temporal_history workflow_id=<workflow_id> run_id=<run_id> page_size=<page_size> page_token=<page_token>`
+  Read one history page for exact observed workflow_id AND run_id. Follow next_page_token; preserve eventId/eventType/time and causal event references. History may aggregate retries and does not prove external payment effects. No wait, signal, cancel, terminate, start, reset or workflow query.
 - `python workshop/qai_tool.py --read-only k8sgpt_analyze namespace=<namespace>`
   Diagnose Kubernetes startup, readiness and restart problems in a namespace via k8sgpt CLI. Use after identifying an unhealthy workload. Its LLM explanation is a hypothesis to verify against Kubernetes evidence; no findings does not exclude an application bug. Requires a configured AI backend.
 - `python workshop/qai_tool.py --read-only code_search pattern=<pattern> glob=<glob> root=<root>`

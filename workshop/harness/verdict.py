@@ -15,6 +15,7 @@ CODE_TOOLS = {"read_file", "code_search"}
 STAND_TOOLS = {
     "kubectl_get_pods", "kubectl_logs", "grep_pod_logs", "tempo_search",
     "tempo_get_trace", "trace_to_logs", "prom_query", "postgres_query", "temporal_inspect",
+    "temporal_list_workflows", "temporal_history",
 }
 TOOL_ERRORS = {
     "kubectl_get_pods": ("kubectl failed",),

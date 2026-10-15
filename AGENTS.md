@@ -15,7 +15,7 @@ live-баги на стенде: BUG-1024 (кэш цен), BUG-TEMP-01 (зави
 |---|---|---|
 | qai-orchestrator | делегирует, выносит вердикт JSON с confidence | tracker_list |
 | qai-report-analyzer | репорт → JSON (симптомы, ids, keywords) | tracker_*, wiki_get, testops_get, github_release_notes |
-| qai-data-investigator | улики со стенда, без выводов о причине | kubectl_*, tempo_*, trace_to_logs, temporal_inspect, postgres_query, k8sgpt_analyze, prom_query |
+| qai-data-investigator | улики со стенда, без выводов о причине | kubectl_*, tempo_*, trace_to_logs, temporal_inspect, temporal_list_workflows, temporal_history, postgres_query, k8sgpt_analyze, prom_query |
 | qai-hypothesis-checker | root cause по коду, только чтение | code_search, read_file |
 
 Промпты ролей: `workshop/prompts/qai-*.md`. Правки там, не в сгенерированных файлах.
@@ -61,7 +61,7 @@ SKILL.md сам по себе проверку не выполняет: нуже
 ## Окружение
 
 `workshop/.env` (из `.env.example`): `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `MODEL`, `KUBECTL_CONTEXT=kind-qai-boutique`,
-`BOUTIQUE_ROOT=<repo>/microservices-demo`, `TEMPO_URL`, `TEMPORAL_HOST`. Порт-форвард: `microservices-demo/hack/workshop/ports-workshop.sh`.
+`BOUTIQUE_ROOT=<repo>/microservices-demo`, `TEMPO_URL`, `TEMPORAL_HOST`, `TEMPORAL_NAMESPACE` (Temporal namespace, по умолчанию `default`). Порт-форвард: `microservices-demo/hack/workshop/ports-workshop.sh`.
 
 ## MCP k8sgpt
 
@@ -85,3 +85,14 @@ investigator вызывает реальные инструменты через
 application-валидатор. Редакторы используют такой же reference draft через application MCP
 qai_validate; наблюдения собирают только через qai_observe того же сервера и investigation_id.
 Baseline workflow сохраняет source/quote. Каталоги infrastructure/application не смешивать.
+
+## Temporal: поиск и история (read-only)
+
+Если workflow_id неизвестен, investigator использует temporal_list_workflows по наблюдаемому
+типу/статусу/интервалу, затем temporal_inspect и temporal_history с точными workflow_id + run_id.
+Namespace задаётся TEMPORAL_NAMESPACE в окружении сервера; модель его не выбирает.
+Продолжение страницы — next_page_token с тем же запросом/исполнением; has_more и continued
+обязательно учитывать в limitations. Пустая страница не доказывает отсутствие операции.
+История может агрегировать activity retries и не подтверждает внешний платёж/возврат сама по себе.
+Все ответы в редакторе собирать через application qai_observe; никакого CLI fallback при ошибке MCP.
+Инструкции и ограничения: docs/temporal-tools.md. Подготовка/изменение стенда в эти tools не входит.

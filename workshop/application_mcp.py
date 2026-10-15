@@ -34,6 +34,7 @@ class ApplicationGateway:
     def __init__(self, backend_factory):
         self.factory = backend_factory
         self.sessions = {}
+        self._lock = asyncio.Lock()
         sid = {'investigation_id': {'type':'string'}}
         self.tools = [
             _tool('qai_begin','Start application investigation. All observations must use qai_observe.',
@@ -53,6 +54,11 @@ class ApplicationGateway:
         return {**session.catalog(), 'tools':schemas, **backend.context()}
 
     async def call(self, name, args):
+        # Keep observations, replay state and validation ordered while tool I/O runs off-loop.
+        async with self._lock:
+            return await self._call(name, args)
+
+    async def _call(self, name, args):
         Draft202012Validator(self.schemas[name]).validate(args)
         error = False
         if name == 'qai_begin':
@@ -85,7 +91,7 @@ class ApplicationGateway:
                 schema = next(s['function']['parameters'] for s in schemas if s['function']['name']==tool)
                 Draft202012Validator(schema).validate(args['arguments'])
                 try:
-                    result = str(impl[tool](**args['arguments']))
+                    result = str(await asyncio.to_thread(impl[tool], **args['arguments']))
                 except Exception as exc:
                     result = f'TOOL ERROR: {type(exc).__name__}: {exc}'
                 error = tool_result_failed(tool,result)
@@ -124,7 +130,7 @@ class LiveTools:
         # Explicit read-only subset; no arbitrary SQL, runbook, shell or MCP fallback.
         allowed = {'tracker_list','tracker_get','wiki_get','testops_get','github_release_notes',
                    'kubectl_get_pods','kubectl_logs','grep_pod_logs','tempo_search','tempo_get_trace',
-                   'trace_to_logs','temporal_inspect','prom_query','code_search','read_file'}
+                   'trace_to_logs','temporal_inspect','temporal_list_workflows','temporal_history','prom_query','code_search','read_file'}
         schemas = [s for s in ALL_TOOLS_SCHEMA if s['function']['name'] in allowed]
         return schemas,{s['function']['name']:ALL_TOOLS_IMPL[s['function']['name']] for s in schemas}
 
