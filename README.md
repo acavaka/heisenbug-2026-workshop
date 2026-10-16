@@ -21,7 +21,7 @@ Boutique и order-worker используются только на чтение
 установщики и контрольные суммы. Одного clone для установки без скачиваний недостаточно.
 Проверенный маршрут: macOS Apple Silicon / Python 3.12.6 / установленный Docker 4.42.1.
 Установка приложенного Docker 4.91.0/VMM на чистом Mac и Windows/Linux/Intel не подтверждены.
-[MacBook с USB](docs/new-macbook-offline.md) · [ограничения Windows](docs/setup-windows.md).
+[MacBook с USB](docs/new-macbook-offline.md) · [Windows x64 / WSL2: комплект и границы проверки](docs/setup-windows.md).
 
 Подготовьте выбранный клиент и авторизацию модели заранее. Подписка редактора не требует
 API-ключа для MCP; облачной модели нужен интернет. Стандартный Python использует отдельный

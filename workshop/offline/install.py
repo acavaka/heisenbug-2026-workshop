@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Participant offline dependency install: macOS arm64 Python 3.12 only."""
+"""Install the matching offline wheel pack; refuse wrong OS/CPU or existing venv."""
 import argparse,hashlib,json,platform,subprocess,sys,venv
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--wheels',type=Path,required=True);p.add_argument('--venv',type=Path,default=Path('workshop/.venv'));a=p.parse_args()
-if sys.platform!='darwin' or platform.machine()!='arm64' or sys.version_info[:2]!=(3,12):
- raise SystemExit('This wheel pack requires macOS arm64, Python 3.12. Obtain the matching platform pack; no network fallback.')
 manifest=json.loads((a.wheels/'manifest.json').read_text())
+actual=(sys.platform,platform.machine())
+expected={'darwin':('darwin','arm64'),'linux':('linux','x86_64')}.get(manifest.get('platform'))
+if actual!=expected or sys.version_info[:2]!=(3,12):
+ raise SystemExit(f'Wheel pack platform mismatch: needs {expected} Python 3.12, got {actual} {sys.version_info[:2]}. No network fallback.')
 for item in manifest['artifacts']:
- if hashlib.sha256((a.wheels/item['file']).read_bytes()).hexdigest()!=item['sha256']:raise SystemExit('Wheel checksum failed: '+item['file'])
+ if hashlib.file_digest((a.wheels/item['file']).open('rb'),'sha256').hexdigest()!=item['sha256']:raise SystemExit('Wheel checksum failed: '+item['file'])
 if a.venv.exists():raise SystemExit('Refusing to overwrite existing venv; use a new --venv directory.')
 venv.EnvBuilder(with_pip=True).create(a.venv)
 py=a.venv.resolve()/'bin/python'
