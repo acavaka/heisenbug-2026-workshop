@@ -1,20 +1,37 @@
-# Документация участника QAI
+# Документация участника
 
-[Начало занятия](workshop-kit.md) · [Подготовка](participant-prework-draft.md) ·
-[Четыре задания](workshop-exercises-draft.md).
+Для занятия достаточно подготовки и четырёх карточек. Остальные документы открывайте по мере необходимости.
 
-| Задача | Инструкция |
-|---|---|
-| Подготовить ноутбук | [MacBook с USB](new-macbook-offline.md), [Windows](setup-windows.md) |
-| Понять устройство агента | [Оркестратор](model-orchestrator.md), [доказательства](evidence-contract.md) |
-| Спроектировать первого агента | [Подходы, минимальный цикл, пилот и первичные источники](agent-building-guide.md) |
-| Выбрать программу | [Python и редакторы](multi-provider.md) |
-| Подключить инструменты | [Application MCP](application-mcp.md), [k8sgpt MCP](k8sgpt-mcp.md), [Temporal](temporal-tools.md) |
-| Написать инструмент | [Контракт и шаблон](tool-authoring.md) |
-| Проверять качество | [Eval и границы валидатора](agent-eval.md) |
-| Использовать после занятия | [Понедельник](monday-replay-guide.md), [свой стек](port-to-your-stack.md) |
-| Выбрать runtime | [Собственный цикл, готовый агент, фреймворк](harness-workshop-discussion.md) |
-| Найти локальный сервис | [Порты](sources-and-ports.md) |
+## До занятия
 
-Решения, подсказки, слайды и материалы ведущего выдаются отдельно и не включены в этот состав.
-Суффикс draft в именах prework и заданий сохранён для совместимости; документы актуальны.
+- [Что подготовить](participant-prework-draft.md) — комплект, программа для работы и проверка готовности.
+- [MacBook](new-macbook-offline.md) / [Windows x64 и WSL2](setup-windows.md) — установка и запуск для своей системы.
+- [Выбор программы](multi-provider.md) — чем отличаются Python, Codex, Claude Code и Cursor.
+
+## Во время занятия
+
+- [Начать работу](workshop-kit.md).
+- [Четыре задания](workshop-exercises-draft.md).
+- [Адреса локальных сервисов](sources-and-ports.md).
+
+## Если нужно подключить инструменты
+
+- [qai_application](application-mcp.md) — файловый пример задания 4; подключается до практики.
+- [k8sgpt](k8sgpt-mcp.md) — чтение Kubernetes; подключаем в задании 3.
+- [Temporal](temporal-tools.md) — дополнительная справка для живых workflow.
+
+## После занятия
+
+- [Повторить на своём проекте](monday-replay-guide.md).
+- [Спроектировать первого агента](agent-building-guide.md).
+- [Перенести на свой стек](port-to-your-stack.md).
+
+## Подробности устройства
+
+- [Как работает оркестратор](model-orchestrator.md).
+- [Как проверяются доказательства](evidence-contract.md).
+- [Как написать инструмент](tool-authoring.md).
+- [Как оценивать качество](agent-eval.md).
+- [Свой цикл, готовый агент или фреймворк](harness-workshop-discussion.md).
+
+Решения и материалы ведущего выдаются отдельно. Слово `draft` в именах некоторых файлов сохранено, чтобы старые ссылки продолжали работать; страницы используются в текущем занятии.
