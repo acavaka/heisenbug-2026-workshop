@@ -7,6 +7,7 @@
 |---|---|
 | Подготовить ноутбук | [MacBook с USB](new-macbook-offline.md), [Windows](setup-windows.md) |
 | Понять устройство агента | [Оркестратор](model-orchestrator.md), [доказательства](evidence-contract.md) |
+| Спроектировать первого агента | [Подходы, минимальный цикл, пилот и первичные источники](agent-building-guide.md) |
 | Выбрать программу | [Python и редакторы](multi-provider.md) |
 | Подключить инструменты | [Application MCP](application-mcp.md), [k8sgpt MCP](k8sgpt-mcp.md), [Temporal](temporal-tools.md) |
 | Написать инструмент | [Контракт и шаблон](tool-authoring.md) |
